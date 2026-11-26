@@ -9,3 +9,11 @@
 #milestones strong{color:var(--lime);font:bold 11px monospace;letter-spacing:.7px}
 #milestones ol{padding-left:1.6em;margin:8px 0 0}
 #milestones li+li{margin-top:5px}
+
+.towerPocket{display:block;padding:9px 12px;border-left:3px solid var(--pink);background:#211c27;color:#e7dfea;font:14px/1.4 monospace}
+#choices:has(.landingDoor){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#choices:has(.landingDoor)>.action:not(.landingDoor){grid-column:1/-1}
+#choices .landingDoor{--door:#385670;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:14px;min-height:125px;padding:12px 9px;text-align:center;background:linear-gradient(90deg,#0002 3%,transparent 3% 96%,#0003 96%),var(--door);border:4px ridge #c5afa1;color:white}
+#choices .landingDoor::before{content:attr(data-flat);background:#201d20;color:#ffe496;border:1px solid #ccae76;padding:4px 8px;font:bold 13px monospace;letter-spacing:1px}
+#choices .door1{--door:#715222}#choices .door2{--door:#813d41}#choices .door3{--door:#535456}#choices .door4{--door:#355942}
+#choices .landingDoor:is(:hover,:focus-visible){outline:2px solid var(--lime);outline-offset:1px}
