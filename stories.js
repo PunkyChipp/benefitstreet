@@ -21,3 +21,18 @@ const encounters=[
 ["MARKET DAY","Air fryer dynasty","Kev’s bought a pallet of air fryers. Half have European plugs. All have a dream.",[
 ["Staff Kev’s market stall",15,-2,1,"You sell five before lunch. Kev promotes you to regional manager of the folding table."],["Cook chips for the queue",5,2,2,"People come for appliances and stay for chips. The queue wraps round the bookies."]]]
 ];
+
+encounters.push(
+ ['PUBLIC CONSULTATION','The flat with the blue plaque','Someone has nominated the boiler in 4B for listed status. It predates the estate and makes a noise like a fax machine falling downstairs.',[
+ ['Sell audio tours',11,-1,1,'The first group demands a refund when the heating briefly works.'],
+ ['Bring it to the repair hearing',0,1,4,'Mo plays the recording. Three councillors duck under the table.']]],
+ ['PIRATE RADIO','Dead air at the wake','Pat’s phone pairs with the wrong speaker. The mourners at number nine are hearing a drum and bass remix of the bus timetable.',[
+ ['Read out the diversions',7,-1,2,'Aunt Jean would have wanted everyone to know the 47 terminates early.'],
+ ['Hand Nan the mic',0,3,3,'Nan spits sixteen bars about the deceased’s outstanding snooker tab.']]],
+ ['BOOT SALE','Val versus the algorithm','The self-checkout thinks Val is an unexpected item. Val thinks the self-checkout is a jumped-up fucking toaster.',[
+ ['Ring the whole lot through',9,-1,2,'Thirty tins of peaches later the till asks Val to rate the experience. Brave.'],
+ ['Run interference',0,2,3,'You distract the manager while Val gives the toaster one star.']]],
+ ['LIFT MUSIC','The holding pen','Babs has recorded forty minutes of council hold music for her difficult second album. The label wants a radio edit.',[
+ ['Cut straight to the operator',13,-1,2,'The single lasts two seconds. Both are a dial tone.'],
+ ['Book the listening party',-3,3,4,'Everyone is still on hold when the encore starts.']]]
+);

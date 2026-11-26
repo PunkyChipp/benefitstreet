@@ -27,3 +27,20 @@ const finds=[
  ['📸','A disposable camera','All twenty-seven pictures are of the same pigeon at slightly different distances.'],
  ['📀','Kev’s debut single','The B-side is the instrumental hold music from the council switchboard.']
 ];
+
+errands.push(
+ {name:'Save the night bus',reward:38,steps:[
+ ['pitch','Count the stranded fans','Gaz counts twenty passengers and a cardboard cut-out of the keeper.'],
+ ['office','Challenge the timetable','Mo finds the consultation. It ran for eight minutes on Boxing Day.'],
+ ['street','Ride the first service','The whole estate rides one stop. The driver gets a standing ovation.']]},
+ {name:'The lift inquiry',reward:44,steps:[
+ ['wash','Find the maintenance ledger','Dot kept it under dryer two to stop the bastard wobbling.'],
+ ['office','Read the small print','The lift has been listed as a vertical community garden since 2008.'],
+ ['street','Call the engineer','The doors finally open. Inside is a folding chair and a mint-condition Argos catalogue.']]}
+);
+finds.push(
+ ['📟','A pager going berserk','One message from 1999. Kev still wants picking up.'],
+ ['🥄','The ceremonial spoon','Dot swears in every new tea monitor with this.'],
+ ['📣','A broken megaphone','It only whispers. The library offers you a residency.'],
+ ['🦚','A peacock feather','The mayor’s emotional support bird has left the inquiry.']
+);
