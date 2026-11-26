@@ -12,13 +12,17 @@ const projects=[
  ['Repair the clubhouse urn',24,'Free tea after every shift restores one morale.'],
  ['Start a residents’ fund',30,'The residents chip in £12 towards each remaining rent bill.']
 ];
-const chapters=['Bin wars','The inspection','Cup fever','Estate of the year'];
+const chapters=['Bin wars','The inspection','Cup fever','Estate of the year','Last bus standing','Going up'];
 const weeks=[
  ['The great bin amnesty','The council sent one skip. Kev has brought a speedboat. Someone needs to run the queue.','Marshal the queue',16,2,'The speedboat leaves full of broken microwaves.'],
  ['Inspection day','An inspector asks why the lift has a loyalty card. The residents nominate you as spokesperson.','Give the grand tour',20,3,'The inspector stamps the repair order. Bev frames it beside the darts trophy.'],
  ['West Shambles cup final','Rain stopped play. The ref will restart if someone can find the ball in the allotments.','Organise the search',24,3,'Dot returns with two footballs and a prize marrow. The match ends one–nil.'],
  ['Estate of the year','The judges are coming. Sal has already stuck a gold star over the boarded-up cashpoint.','Host the street party',29,4,'Even the parking warden joins the conga. The trophy is a repainted kettle.']
 ];
+weeks.push(
+ ['Last bus to Shambles','The route is up for review. Pat has wired the stop button to his air horn.','Conduct the midnight service',32,4,'Sixteen passengers and one exhausted hen make the last connection.'],
+ ['Grand reopening','The council leader wants to cut the ribbon on the lift. Babs has already sold tickets to floors two through six.','Run the lift rave',38,5,'Doors closing. Bass dropping. For once every button on this estate does exactly what it bloody says.']
+);
 const favours={
  street:[['Bev’s missing wheelie bin','It’s on the number 47 bus. The driver says it paid a child fare.','Meet the bus at the depot','You wheel it home to a guard of honour.'],['Committee biscuits','Bev needs someone to keep the bourbons out of the planning meeting until item six.','Guard the biscuit tin','The committee reaches item six for the first time since 1998.'],['Pavement premiere','Kev has fixed his projector. The only screen is a bedsheet on Bev’s washing line.','Set up the chairs','Forty neighbours watch a DVD menu for an hour before anyone notices.']],
  shop:[['Mystery multipack','A delivery of novelty crisps has arrived labelled “probably beef”.','Run a tasting','Local consensus is pencil sharpener with notes of Sunday roast.'],['Sal’s shop cat','The shop cat has fallen asleep on the electronic scales.','Tempt him off','The cat moves. Bananas are no longer £18 a bunch.'],['The one-pence summit','Sal has a jar of coppers and a supplier who believes in exact change.','Count the jar','You find £8, a foreign button and a strong argument for card payments.']],
@@ -29,10 +33,11 @@ const favours={
 const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const shuffle=a=>{let b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
 const sample=a=>a[Math.floor(Math.random()*a.length)];
-const week=()=>Math.min(3,Math.floor(s.turn/14)),period=()=>s.turn%2?'Evening':'Morning',day=()=>days[Math.floor(s.turn/2)%7],bill=()=>[63,77,92,108][week()]+s.debt;
-function fresh(){return {steps:[0,0,0,0],finds:[],turn:0,cash:32,morale:8,cred:0,debt:0,place:'street',friends:{},projects:0,stories:shuffle(encounters.map((_,i)=>i)),storyIndex:0,news:'Local pigeon banned from Greggs. More as it develops.',journal:[],result:null,mini:null,totalPaid:0,paidWeeks:0}}
+const runWeeks=()=>s.duration||4;
+const week=()=>Math.min(runWeeks()-1,Math.floor(s.turn/14)),period=()=>s.turn%2?'Evening':'Morning',day=()=>days[Math.floor(s.turn/2)%7],bill=()=>[63,77,92,108,119,132][week()]+s.debt;
+function fresh(){return {duration:6,steps:[0,0,0,0,0,0],finds:[],turn:0,cash:32,morale:8,cred:0,debt:0,place:'street',friends:{},projects:0,stories:shuffle(encounters.map((_,i)=>i)),storyIndex:0,news:'Local pigeon banned from Greggs. More as it develops.',journal:[],result:null,mini:null,totalPaid:0,paidWeeks:0}}
 const key='west-shambles-month-v1';let s=fresh(),sound=false,ctx,timer;
-try{let old=JSON.parse(localStorage.getItem(key));if(old&&Number.isInteger(old.turn)&&old.turn>=0&&old.turn<=56&&places[old.place])s=old;sound=localStorage.getItem('estate-sound')==='1'}catch{}
+try{let old=JSON.parse(localStorage.getItem(key));if(old&&Number.isInteger(old.turn)&&old.turn>=0&&old.turn<=(old.duration===6?84:56)&&places[old.place])s=old;sound=localStorage.getItem('estate-sound')==='1'}catch{}
 function save(){try{localStorage.setItem(key,JSON.stringify(s))}catch{}}
 function tone(high=false){if(!sound)return;try{ctx??=new AudioContext();ctx.resume();const o=ctx.createOscillator(),g=ctx.createGain();o.type='triangle';o.frequency.value=high?720:410;g.gain.setValueAtTime(.07,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.12);o.connect(g).connect(ctx.destination);o.start();o.stop(ctx.currentTime+.13)}catch{}}
 function element(tag,str,cls){let el=document.createElement(tag);if(str!=null)el.textContent=str;if(cls)el.className=cls;return el}
@@ -44,8 +49,8 @@ function finish(title,text,cash,morale,cred){const prior=s.morale;s.cash=Math.ma
  log(title+(gains?' · '+gains:''));let extra='';
  if(s.turn%14===13){const due=bill(),fund=s.projects>=3?12:0,pay=Math.min(s.cash,Math.max(0,due-fund));s.cash-=pay;s.totalPaid+=pay;s.debt=Math.max(0,due-pay-fund);if(!s.debt)s.paidWeeks++;
  extra=' Rent night: £'+pay+' paid'+(fund?' plus £12 from the fund':'')+'. '+(s.debt?'£'+s.debt+' in arrears.':'All square.');log(extra.trim())}
- s.turn++;s.mini=null;s.result={title,text:text+(gains?' '+gains+'.':'')+extra};save();render()}
-function visit(k){if(s.mini||s.result||s.turn===56)return;s.place=k;save();render()}
+ s.turn++;recordMilestones();s.mini=null;s.result={title,text:text+(gains?' '+gains+'.':'')+extra};save();render()}
+function visit(k){if(s.mini||s.booking||s.result||s.turn>=runWeeks()*14)return;s.place=k;save();render()}
 function favour(){const p=s.place,n=s.friends[p]||0,story=favours[p][n%3];line(story[0],story[1],places[p][2].toUpperCase()+' · FAVOUR '+(n+1));$('choices').replaceChildren();
  button($('choices'),story[2],()=>{s.friends[p]=n+1;const bonus=(n+1)%3===0;finish(story[0],story[3]+(bonus?' Your neighbour slips you an £8 thank-you.':''),5+(s.projects?2:0)+(bonus?8:0),1,2)});
  button($('choices'),'Back',render)}
@@ -60,7 +65,7 @@ function question(m){
 function startMini(){const kind=s.place;const m={kind,round:0,hits:0,total:3+Number(week()>1),msg:'',seed:Math.random()*6};if(kind==='wash'){const symbols=['🍋','🧦','🦆','🍄','🪩','🐟'].slice(0,3+week());m.deck=shuffle([...symbols,...symbols]);m.open=[];m.found=[];m.tries=0;m.max=symbols.length*2+1}else if(kind!=='pitch')m.q=question(m);s.mini=m;save();render();$('stage').scrollIntoView({block:'nearest'});}
 function payout(){const m=s.mini,count=m.kind==='wash'?m.found.length/2:m.hits;
  const remarks={shop:'Sal counts the float twice and lets you take the least dented tin.',wash:'Dot clips the surviving pairs to a commemorative washing line.',office:'Mo adds your stamp tally to a spreadsheet called FINAL_final_6.',pitch:'Gaz records the official result on the back of a chip receipt.'};
- finish(places[m.kind][3],remarks[m.kind]+' '+count+' / '+(m.kind==='wash'?m.deck.length/2:m.total)+' scored.',3+count*(week()+2),s.projects>=2?0:-1,count>=2?2:0)}
+ finish(places[m.kind][3],remarks[m.kind]+' '+count+' / '+(m.kind==='wash'?m.deck.length/2:m.total)+' scored.',3+(hasLegacy('stamp')?4:0)+count*(week()+2),s.projects>=2?0:-1,count>=2?2:0)}
 function advanceMini(correct,feedback){const m=s.mini;m.round++;if(correct){m.hits++;tone(true)}m.msg=feedback;if(m.round<m.total&&m.kind!=='pitch')m.q=question(m);save();render()}
 function pair(i){const m=s.mini;if(m.open.length===2||m.open.includes(i)||m.found.includes(i))return;m.open.push(i);if(m.open.length===2){m.tries++;const [a,b]=m.open;if(m.deck[a]===m.deck[b]){m.found.push(a,b);m.open=[];m.msg='A perfect pair.';tone(true)}else m.msg='Odd socks. Remember where they landed.'}save();render()}
 function arcade(){const m=s.mini,stage=$('stage');stage.hidden=false;const box=element('div',null,'machine');stage.append(box);box.append(element('h3',places[m.kind][3].toUpperCase()));
@@ -73,36 +78,39 @@ function arcade(){const m=s.mini,stage=$('stage');stage.hidden=false;const box=e
  if(m.msg)box.append(element('p',m.msg,'resultLine'))
 }
 function render(){
- clearInterval(timer);const p=s.place,loc=places[p],w=week(),over=s.turn>=56,finale=!over&&s.turn%14===13;
+ clearInterval(timer);const p=s.place,loc=places[p],w=week(),over=s.turn>=runWeeks()*14,finale=!over&&s.turn%14===13;
  $('choices').replaceChildren();$('controls').replaceChildren();$('stage').replaceChildren();$('stage').hidden=true;
  $('backdrop').style.backgroundImage='url('+loc[1]+'.webp)';$('scene').className='scene'+(s.turn%2?' evening':'')+(p==='street'||p==='pitch'?(Math.floor(s.turn/2)%5===3?' rain':''):'');
- $('scene').setAttribute('aria-label',loc[0]+', '+period());$('sceneName').textContent=loc[0].toUpperCase();$('clock').textContent=over?'MONTH COMPLETE':day().toUpperCase()+' · '+period().toUpperCase();
+ $('scene').setAttribute('aria-label',loc[0]+', '+period());$('sceneName').textContent=loc[0].toUpperCase();$('clock').textContent=over?'CAMPAIGN COMPLETE':day().toUpperCase()+' · '+period().toUpperCase();
  document.querySelector('.sign').hidden=p!=='street';$('decor').replaceChildren();
  if(p==='street'){if(s.projects)$('decor').append(element('span',null,'flags'));$('decor').append(passerBy(s.turn))}
- $('day').textContent=over?'DAY 28 / 28':'W'+(w+1)+' · '+day().slice(0,3).toUpperCase()+' · '+period().toUpperCase();$('sectionName').textContent=chapters[w].toUpperCase();
- $('map').replaceChildren();Object.entries(places).forEach(([k,v])=>{let b=button($('map'),v[0],()=>visit(k),!!s.mini||!!s.result||over);b.setAttribute('aria-current',k===p)});
+ $('day').textContent=over?'DAY '+(runWeeks()*7)+' / '+(runWeeks()*7):'W'+(w+1)+' · '+day().slice(0,3).toUpperCase()+' · '+period().toUpperCase();$('sectionName').textContent=chapters[w].toUpperCase();
+ $('map').replaceChildren();Object.entries(places).forEach(([k,v])=>{let b=button($('map'),v[0],()=>visit(k),!!s.mini||!!s.booking||!!s.result||over);b.setAttribute('aria-current',k===p)});
  $('cash').textContent='£'+s.cash;$('cred').textContent=s.cred;$('morale').textContent=s.morale+'/10';$('pot').textContent=over?'£'+s.debt+' owed':'£'+s.cash+' / £'+bill();$('fill').style.width=Math.min(100,s.cash/bill()*100)+'%';$('feed').textContent=s.news;
- $('project').replaceChildren(element('strong','WEEK '+(w+1)+' / 4 · '+chapters[w].toUpperCase()),element('div','Estate projects: '+s.projects+'/3 · Rent weeks cleared: '+s.paidWeeks+'/4'),element('div',loc[2]+' · '+(s.friends[p]||0)+' favours'));
+ $('project').replaceChildren(element('strong','WEEK '+(w+1)+' / '+runWeeks()+' · '+chapters[w].toUpperCase()),element('div','Estate projects: '+s.projects+'/3 · Rent weeks cleared: '+s.paidWeeks+'/'+runWeeks()),element('div',loc[2]+' · '+(s.friends[p]||0)+' favours'));
+ showMilestones();
  $('journal').replaceChildren(...(s.journal.length?s.journal:['Your first morning on Benefit Street.']).map(n=>element('li',n)));
  const chain=errands[w],step=s.steps[w],next=chain.steps[step];
- $('errand').replaceChildren(element('strong','NEIGHBOURHOOD ERRAND'),element('h3',chain.name),element('div',next?step+'/3 · '+next[1]+' at '+places[next[0]][0]+'. Reward: £'+chain.reward+'.':'Complete · £'+chain.reward+' collected.'),element('small','Street finds: '+s.finds.length+' / '+finds.length));
+ $('errand').replaceChildren(element('strong','NEIGHBOURHOOD ERRAND'),element('h3',chain.name),element('div',next?step+'/3 · '+next[1]+' at '+places[next[0]][0]+'. Reward: £'+chain.reward+'.':'Complete · £'+chain.reward+' collected.'),element('small','Street finds: '+s.finds.length+' / '+(runWeeks()*2)));
  $('discovery').replaceChildren();
  const idx=Math.floor(s.turn/7),target=Object.keys(places)[idx%5];
- if(!s.result&&!s.mini&&!over&&!finale&&p===target&&!s.finds.includes(idx)){
+ if(!s.result&&!s.mini&&!s.booking&&!over&&!finale&&p===target&&!s.finds.includes(idx)){
  const [icon,item,caption]=finds[idx],b=button($('discovery'),icon,()=>{s.finds.push(idx);s.cash+=2;s.cred++;log(item+' · +£2 · +1 cred');s.result={title:item,text:caption+' +£2 · +1 cred. Searching takes no time.'};save();render()});b.setAttribute('aria-label','Inspect '+item);b.title='Inspect '+item;
  b.style.left=(48+idx*7%34)+'%';b.style.top=(52+idx*6%18)+'%';
  }
  const act=(label,fn,locked)=>button($('choices'),label,fn,locked);
- if(s.result){line(s.result.title,s.result.text,'STREET DIARY');act(over?'See the month’s verdict':'Continue · '+day()+' '+period().toLowerCase(),()=>{s.result=null;save();render()});return}
- if(over){const title=s.debt?'On the payment plan':s.projects===3&&s.cred>=24?'Mayor of Benefit Street':'Rent paid. Kettle on.';line(title,'Four weeks on the estate. You put £'+s.totalPaid+' into rent, completed '+s.projects+' community projects and did '+Object.values(s.friends).reduce((a,b)=>a+b,0)+' favours. '+(s.debt?'£'+s.debt+' rolls into next month. Bev saves you a chair.':'Your rent account reads £0 owed. Sal puts your picture in the window.'),'MONTH IN REVIEW');act('Start another month',()=>{s=fresh();save();render()});return}
+ if(s.result){line(s.result.title,s.result.text,'STREET DIARY');act(over?'See the estate verdict':'Continue · '+day()+' '+period().toLowerCase(),()=>{s.result=null;save();render()});return}
+ if(over){const title=s.debt?'On the payment plan':s.projects===3&&s.cred>=24?'Mayor of Benefit Street':'Rent paid. Kettle on.';line(title,runWeeks()+' weeks on the estate. You put £'+s.totalPaid+' into rent, completed '+s.projects+' community projects and did '+Object.values(s.friends).reduce((a,b)=>a+b,0)+' favours. '+(s.debt?'£'+s.debt+' rolls into next month. Bev saves you a chair.':'Your rent account reads £0 owed. Sal puts your picture in the window.'),'ESTATE IN REVIEW');seasonRewards(act);return}
+ if(s.booking){bookingScene();return}
  if(s.mini){line(loc[3],'Play the shift in the scene above. Your progress saves after each move.','ON SHIFT · '+loc[0].toUpperCase());arcade();act('Clock out with current score',payout);return}
  if(finale){const e=weeks[w];line(e[0],e[1],'SUNDAY SPECIAL · RENT NIGHT');act(e[2]+' · earn £'+e[3],()=>finish(e[0],e[5],e[3],-1,e[4]));const required=3+w*4;act('Rally the residents · '+required+' cred',()=>finish(e[0],e[5]+' The whole street chips in.',e[3]+12,2,e[4]),s.cred<required);return}
  if(p==='street'){
  const e=encounters[s.stories[s.storyIndex%s.stories.length]];line(e[1],e[2],'ON YOUR DOORSTEP · '+period().toUpperCase());act('Get involved',story);
  }else{
  const descriptions={shop:'Sal slides the cash drawer across. The queue is already arguing about who was next.',wash:'Dot tips a basket of odd socks onto the folding table. Every reunited pair earns a bounty.',office:'Mo points at the applications tray. Read the rule on each ticket and stamp the matching claims.',pitch:'Gaz has chalked a goal on the training ground. Watch the ball and pick your moment to shoot.'};
- line(loc[3],descriptions[p],'SHIFT AVAILABLE · '+loc[2].toUpperCase());act(s.morale?'Start shift · earn up to £'+(3+(p==='wash'?3+w:3+Number(w>1))*(w+2)):'Too knackered · take a break',startMini,!s.morale)
+ line(loc[3],descriptions[p],'SHIFT AVAILABLE · '+loc[2].toUpperCase());act(s.morale?'Start shift · earn up to £'+(3+(hasLegacy('stamp')?4:0)+(p==='wash'?Math.min(6,3+w):3+Number(w>1))*(w+2)):'Too knackered · take a break',startMini,!s.morale)
  }
+ if(bookings[p])act(bookings[p].host+' · '+bookings[p].name+((s.gigs?.[p]||0)>=2?' · headline gig':' · '+(s.gigs?.[p]||0)+'/2 to headline'),startBooking,!s.morale);
  act('Help '+loc[2]+' · '+favours[p][(s.friends[p]||0)%3][0],favour);
  if(p==='street'&&s.projects<3){const [name,cost,txt]=projects[s.projects];act(name+' · £'+cost,()=>{s.projects++;finish(name,txt,-cost,2,3)},s.cash<cost)}
  if(next&&next[0]===p)act('Errand · '+next[1],()=>{s.steps[w]++;const done=s.steps[w]===3;finish(chain.name,next[2]+(done?' Errand complete!':''),done?chain.reward:0,1,done?4:1)});

@@ -4,3 +4,8 @@
 .machine>button{margin:7px auto 0;background:var(--lime);color:var(--ink);border:1px solid #a6cb64;padding:8px 16px;font:bold 15px monospace}.socks{display:grid;grid-template-columns:repeat(6,1fr)}.socks button{min-height:36px;padding:4px}.machine small{font:12px monospace}.route{animation-timing-function:steps(120,end)}#stage:not([hidden])~*{visibility:hidden}
 #discovery button{position:absolute;z-index:1;border:2px dashed #ffffbf;background:#201c28d9;border-radius:6px;font-size:21px;padding:2px 5px;animation:glint 2s ease-in-out infinite alternate}@keyframes glint{to{box-shadow:0 0 14px #ffff8b;transform:translateY(-3px)}}#errand{padding:12px;background:#211c27;border-left:3px solid var(--pink);margin-bottom:14px;font:14px/1.5 monospace}#errand strong,#errand small{font:bold 11px monospace;letter-spacing:.7px;color:#c5efa1}#errand h3{margin:5px 0;font:bold 16px Arial}#errand small{display:block;margin-top:8px;color:#c8b8c9}@media(prefers-reduced-motion:reduce){#discovery button{animation:none}}
 .pedestrian{width:clamp(32px,4vw,55px);height:auto;bottom:10%;animation-delay:-5s}
+
+#milestones{margin:0 0 14px;padding:12px;background:#211c27;border-left:3px solid var(--lime);font:14px/1.5 monospace}
+#milestones strong{color:var(--lime);font:bold 11px monospace;letter-spacing:.7px}
+#milestones ol{padding-left:1.6em;margin:8px 0 0}
+#milestones li+li{margin-top:5px}
