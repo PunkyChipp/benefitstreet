@@ -1,13 +1,9 @@
 # Benefit Street
 
-Play at https://punkychipp.github.io/benefitstreet/.
+[Play West Shambles on GitHub Pages](https://highereconomicsrevision.co.uk/benefitstreet/).
 
-A six-week browser game set in West Shambles. Travel between five locations, work four playable jobs, take on neighbours’ favours and spend spare cash on shared projects. Each action uses a morning or evening. Rent falls due on Sundays. Work the pirate radio with Ceefax, bid at Jan’s mystery auction or sample Spanner’s dryers. Estate Reputation records four milestones in turns so friends can compare separate solo runs. At the verdict, choose a permanent upgrade and begin a new season. Upgrades and best milestone turns carry over. Existing four-week saves finish on their original schedule.
+A single-player estate life sim and arcade. Walk with WASD, arrow keys, the touch pad, or by tapping a spot on the estate. Space or E interacts. G chats with a neighbour or gives them produce. The on-screen controls work on touchscreens. Esc pauses a shift.
 
-Open index.html locally or serve this directory as static files. No build or external dependencies. Progress saves in the current browser. The original seven-day game and its save are accessible via the Classic link.
+Grow crops in three reclaimed tubs, water them and sleep at Flat 9. Two shifts also advance the day. Inside Flat 9, cook a homegrown crop and a canal fish into a supper or check the forecast on the telly. Fish from the jetty at Shambles Cut through the west passage. Strike when the float dips, then reel and release to manage tension. Give produce or fish to residents to build friendships and unlock new crops. The noticeboard tracks six weekly community projects. A regular’s gift also earns their signature. Earn stars on the bike, on air, in goal and in the lift shaft. Carry supplies to the tenants’ hall and play the rent-party pinball table to finish a project. Improvements, job ratings and chapter records carry into subsequent circuits.
 
-GitHub Pages serves the gh-pages branch. The bundled Press Start 2P font is licensed under the SIL Open Font License in FONT-LICENSE.txt.
-
-Take the stairs at the estate to start a petition run. Pick doors, hear residents out, call in favours and draft equipment. Twelve signatures win a repair order. Filing early or getting bounced with at least six signatures earns a key. Keys buy permanent starting equipment and carry through season resets.
-
-Lift Rescue is playable directly in the estate scene. Use arrow keys, WASD, the on-screen pad or a swipe to walk and push. Collect a fuse, park a parts trolley in the striped bay and enter the powered lift. Finish three landings for £24 and three keys. A floor reset keeps the moves already spent in the final score.
+Serve this directory as static files or open index.html. There is no build step. Progress saves on this device. The [six-week diary](season.html) and [classic seven-day game](classic.html) use their original saves. GitHub Pages serves the gh-pages branch. The bundled Press Start 2P font is licensed in FONT-LICENSE.txt.
