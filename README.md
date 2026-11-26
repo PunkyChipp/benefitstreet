@@ -9,3 +9,5 @@ Open index.html locally or serve this directory as static files. No build or ext
 GitHub Pages serves the gh-pages branch. The bundled Press Start 2P font is licensed under the SIL Open Font License in FONT-LICENSE.txt.
 
 Take the stairs at the estate to start a petition run. Pick doors, hear residents out, call in favours and draft equipment. Twelve signatures win a repair order. Filing early or getting bounced with at least six signatures earns a key. Keys buy permanent starting equipment and carry through season resets.
+
+Lift Rescue is playable directly in the estate scene. Use arrow keys, WASD, the on-screen pad or a swipe to walk and push. Collect a fuse, park a parts trolley in the striped bay and enter the powered lift. Finish three landings for £24 and three keys. A floor reset keeps the moves already spent in the final score.

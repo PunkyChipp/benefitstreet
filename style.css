@@ -17,3 +17,20 @@
 #choices .landingDoor::before{content:attr(data-flat);background:#201d20;color:#ffe496;border:1px solid #ccae76;padding:4px 8px;font:bold 13px monospace;letter-spacing:1px}
 #choices .door1{--door:#715222}#choices .door2{--door:#813d41}#choices .door3{--door:#535456}#choices .door4{--door:#355942}
 #choices .landingDoor:is(:hover,:focus-visible){outline:2px solid var(--lime);outline-offset:1px}
+
+.scene.repairScene{height:auto;min-height:320px}
+.repairScene :is(.sign,.stamp,.scenefoot,#discovery){display:none}
+.repairScene #stage{position:relative;align-items:center;justify-content:space-evenly;gap:16px;background:linear-gradient(90deg,#2118256e,#21182552 38%,#211825da);padding:16px}
+.repairMarquee{max-width:43%;padding:20px;background:#211b26ed;box-shadow:6px 6px #131015;color:#fff}
+.repairMarquee small,.repairMarquee span,.repairHead{font:bold 12px monospace;letter-spacing:1px}
+.repairMarquee small{color:#e4cbab}.repairMarquee strong{display:block;font:clamp(20px,3vw,42px)/1.4 var(--pixel);color:var(--lime);padding-top:8px}
+.repairMarquee p{margin:4px 0 12px}.repairMarquee span{color:var(--pink)}
+.repairCab{width:min(400px,100%);padding:8px;background:#211f2a;border:3px solid #8a8192;box-shadow:4px 4px #141218}
+.repairHead{display:flex;justify-content:space-between;padding:3px 5px 7px;color:var(--lime)}
+.repairHead span{color:#ffd498}
+.repairCab canvas{display:block;width:100%;background:#655565;touch-action:none}
+.repairHint{min-height:2.7em;padding:6px 2px;color:#f9ecbe;font:bold 14px/1.3 monospace}
+.repairPad{display:flex;gap:4px}
+.repairPad button{flex:1;min-height:44px;background:#403b4b;border:1px solid #807787;color:white;font:bold 21px monospace;touch-action:manipulation}
+.repairPad button:last-child{font-size:12px}.repairPad button:disabled{opacity:.45}
+@media(max-width:660px){.repairMarquee{display:none}.repairScene #stage{padding:5px}.scene.repairScene{min-height:0}.repairCab{padding:5px}}
