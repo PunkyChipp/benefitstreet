@@ -101,12 +101,21 @@ function render(){
  const act=(label,fn,locked)=>button($('choices'),label,fn,locked);
  if(s.result){line(s.result.title,s.result.text,'STREET DIARY');act(over?'See the estate verdict':'Continue · '+day()+' '+period().toLowerCase(),()=>{s.result=null;save();render()});return}
  if(over){const title=s.debt?'On the payment plan':s.projects===3&&s.cred>=24?'Mayor of Benefit Street':'Rent paid. Kettle on.';line(title,runWeeks()+' weeks on the estate. You put £'+s.totalPaid+' into rent, completed '+s.projects+' community projects and did '+Object.values(s.friends).reduce((a,b)=>a+b,0)+' favours. '+(s.debt?'£'+s.debt+' rolls into next month. Bev saves you a chair.':'Your rent account reads £0 owed. Sal puts your picture in the window.'),'ESTATE IN REVIEW');seasonRewards(act);return}
+ if(s.tower?.repair){
+   repairBoard();line('Get the lift moving',liftTip(s.tower.repair.room),'REPAIR SHIFT · FLOOR '+s.tower.repair.floor+' / 3');
+   act('Clock out early',()=>{
+     const done=s.tower.repair.floor-1;s.tower=null;
+     finish('Tools down',done+' of 3 floors serviced. The caretaker takes over.',done*6,-1,done);
+   });return;
+ }
  if(s.tower){towerScene();return}
  if(s.booking){bookingScene();return}
  if(s.mini){line(loc[3],'Play the shift in the scene above. Your progress saves after each move.','ON SHIFT · '+loc[0].toUpperCase());arcade();act('Clock out with current score',payout);return}
  if(finale){const e=weeks[w];line(e[0],e[1],'SUNDAY SPECIAL · RENT NIGHT');act(e[2]+' · earn £'+e[3],()=>finish(e[0],e[5],e[3],-1,e[4]));const required=3+w*4;act('Rally the residents · '+required+' cred',()=>finish(e[0],e[5]+' The whole street chips in.',e[3]+12,2,e[4]),s.cred<required);return}
  if(p==='street'){
+ repairBoard(true);
  const e=encounters[s.stories[s.storyIndex%s.stories.length]];line(e[1],e[2],'ON YOUR DOORSTEP · '+period().toUpperCase());act('Take the stairs · lift petition',renderTowerDesk);act('Get involved',story);
+ const findButton=$('discovery').querySelector('button');if(findButton)act(findButton.title,()=>findButton.click());
  }else{
  const descriptions={shop:'Sal slides the cash drawer across. The queue is already arguing about who was next.',wash:'Dot tips a basket of odd socks onto the folding table. Every reunited pair earns a bounty.',office:'Mo points at the applications tray. Read the rule on each ticket and stamp the matching claims.',pitch:'Gaz has chalked a goal on the training ground. Watch the ball and pick your moment to shoot.'};
  line(loc[3],descriptions[p],'SHIFT AVAILABLE · '+loc[2].toUpperCase());act(s.morale?'Start shift · earn up to £'+(3+(hasLegacy('stamp')?4:0)+(p==='wash'?Math.min(6,3+w):3+Number(w>1))*(w+2)):'Too knackered · take a break',startMini,!s.morale)
